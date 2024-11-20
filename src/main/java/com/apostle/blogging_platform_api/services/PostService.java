@@ -1,6 +1,7 @@
 package com.apostle.blogging_platform_api.services;
 
 import com.apostle.blogging_platform_api.Dto.PostRequest;
+import com.apostle.blogging_platform_api.exceptions.NotFoundException;
 import com.apostle.blogging_platform_api.model.Post;
 import com.apostle.blogging_platform_api.model.Tag;
 import com.apostle.blogging_platform_api.repository.PostRepository;
@@ -34,13 +35,14 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public Post getPostById(UUID postId) {
+    public Post getPostById(UUID postId){
         return postRepository.findById(postId)
-                .orElseThrow(()->new RuntimeException("Post not found"));
+                .orElseThrow(()->new NotFoundException("Post Not Found with this id"+postId));
     }
 
     public Post updatePost(UUID postId, PostRequest postRequest) {
-        Post post =postRepository.findById(postId).get();
+        Post post =postRepository.findById(postId)
+                .orElseThrow(()->new NotFoundException("Post Not Found with this id"+postId));
         post.setBody(postRequest.getBody());
         post.setTitle(postRequest.getTitle());
         List<Tag>tags=tagRepository.findAllById(postRequest.getTags());

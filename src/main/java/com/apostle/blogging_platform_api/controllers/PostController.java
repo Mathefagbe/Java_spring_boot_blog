@@ -5,6 +5,7 @@ import com.apostle.blogging_platform_api.model.Post;
 import com.apostle.blogging_platform_api.services.PostService;
 import com.apostle.blogging_platform_api.utils.ApiResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping(value = "api/v1")
 public class PostController {
 
     private  final PostService postService;
@@ -33,7 +34,7 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<ApiResponse> getPosts(@RequestBody PostRequest post){
+    public ResponseEntity<ApiResponse> getPosts( @RequestBody PostRequest post){
         ApiResponse apiResponse= new ApiResponse(
                 "Post save successfully",
                 postService.savePost(post),
@@ -45,7 +46,7 @@ public class PostController {
     @GetMapping("/post/{post_id}")
     public ResponseEntity<ApiResponse> getPostById(@PathVariable UUID post_id){
         ApiResponse apiResponse= new ApiResponse(
-            "Post save successfully",
+            "Post fetched successfully",
             postService.getPostById(post_id),
             "success"
         );

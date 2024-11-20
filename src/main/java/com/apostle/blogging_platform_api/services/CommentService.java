@@ -1,6 +1,7 @@
 package com.apostle.blogging_platform_api.services;
 
 import com.apostle.blogging_platform_api.Dto.CommentRequest;
+import com.apostle.blogging_platform_api.exceptions.NotFoundException;
 import com.apostle.blogging_platform_api.model.Comment;
 import com.apostle.blogging_platform_api.model.Post;
 import com.apostle.blogging_platform_api.repository.CommentRespository;
@@ -24,7 +25,7 @@ public class CommentService {
         Comment comment =new Comment();
         comment.setBody(commentRequest.getBody());
         Post post=postRepository.findById(commentRequest.getPost()).orElseThrow(()->
-                new RuntimeException("Post with this id doesn't exist"));
+                new NotFoundException("Post with this id doesn't exist"));
         comment.setPost(post);
         return commentRespository.save(comment);
     }
@@ -41,10 +42,10 @@ public class CommentService {
 
     public Comment updateComment(UUID commentId,CommentRequest commentRequest){
         Comment comment =commentRespository.findById(commentId).orElseThrow(()->
-                new RuntimeException("Comment with this id not found"));
+                new NotFoundException("Comment with this id not found"+commentId));
         comment.setBody(commentRequest.getBody());
         Post post=postRepository.findById(commentRequest.getPost()).orElseThrow(()->
-                new RuntimeException("Post with this id doesn't exist"));
+                new NotFoundException("Post with this id doesn't exist id"+ commentRequest.getPost()));
         comment.setPost(post);
         return commentRespository.save(comment);
     }

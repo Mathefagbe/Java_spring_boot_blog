@@ -32,12 +32,17 @@ public class CommentController {
 
     @GetMapping("/comments")
     public ResponseEntity<ApiResponse> getComment(@PathParam("postId") UUID postId){
-        ApiResponse apiResponse= new ApiResponse(
-                "Comment fetched successfully",
-                commentService.getComment(postId),
-                "success"
-        );
-        return ResponseEntity.ok().body(apiResponse);
+        try{
+            ApiResponse apiResponse= new ApiResponse(
+                    "Comment fetched successfully",
+                    commentService.getComment(postId),
+                    "success"
+            );
+            return ResponseEntity.ok().body(apiResponse);
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
     @DeleteMapping("/comments/{commentId}")
