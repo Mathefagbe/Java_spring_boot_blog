@@ -4,6 +4,8 @@ import com.apostle.blogging_platform_api.Dto.PostRequest;
 import com.apostle.blogging_platform_api.model.Post;
 import com.apostle.blogging_platform_api.services.PostService;
 import com.apostle.blogging_platform_api.utils.ApiResponse;
+import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +26,17 @@ public class PostController {
     }
 
     @GetMapping("/post")
-    public ResponseEntity<ApiResponse> getAllPosts(){
+    public ResponseEntity<ApiResponse> getAllPosts(@PathParam("searchText") String searchText){
         ApiResponse apiResponse= new ApiResponse(
                 "Post fetched successfully",
-                postService.getAllPost(),
+                postService.getAllPost(searchText),
                 "success"
         );
         return ResponseEntity.ok(apiResponse);
     }
 
     @PostMapping("/post")
-    public ResponseEntity<ApiResponse> getPosts( @RequestBody PostRequest post){
+    public ResponseEntity<ApiResponse> getPosts(@Valid @RequestBody PostRequest post){
         ApiResponse apiResponse= new ApiResponse(
                 "Post save successfully",
                 postService.savePost(post),
@@ -54,7 +56,7 @@ public class PostController {
     }
 
     @PutMapping("/post/{post_id}")
-    public ResponseEntity<ApiResponse> updatePost(@PathVariable UUID post_id,@RequestBody PostRequest post){
+    public ResponseEntity<ApiResponse> updatePost(@PathVariable UUID post_id,@Valid @RequestBody PostRequest post){
         ApiResponse apiResponse= new ApiResponse(
                 "Post updated successfully",
                 postService.updatePost(post_id,post),
@@ -73,4 +75,5 @@ public class PostController {
         );
         return ResponseEntity.ok().body(apiResponse);
     }
+
 }

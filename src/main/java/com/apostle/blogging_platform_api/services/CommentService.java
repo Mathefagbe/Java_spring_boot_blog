@@ -33,7 +33,7 @@ public class CommentService {
     public List<Comment> getComment(UUID postId) {
         if (postId == null)
             return commentRespository.findAll();
-        return commentRespository.findByPostId(postId);
+        return commentRespository.findCommentByPostId(postId);
     }
 
     public void deleteComment(UUID commentId) {

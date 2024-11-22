@@ -1,5 +1,6 @@
 package com.apostle.blogging_platform_api.model;
 
+import com.apostle.blogging_platform_api.enums.PostStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -39,8 +40,10 @@ public class Post{
             joinColumns = @JoinColumn(name = "post_id"), // Join column for Post
             inverseJoinColumns = @JoinColumn(name = "tag_id") // Join column for Tag
     )
-//    @JsonManagedReference
     private List<Tag> tags;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(20)",length = 20)
+    private PostStatus postStatus= PostStatus.DRAFT;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
