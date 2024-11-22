@@ -1,6 +1,6 @@
 package com.apostle.blogging_platform_api.services;
 
-import com.apostle.blogging_platform_api.Dto.PostRequest;
+import com.apostle.blogging_platform_api.Dto.PostRequestDTO;
 import com.apostle.blogging_platform_api.enums.PostStatus;
 import com.apostle.blogging_platform_api.exceptions.NotFoundException;
 import com.apostle.blogging_platform_api.model.Post;
@@ -29,15 +29,17 @@ public class PostService {
         if (searchText != null){
             return postRepository.searchPostByTitleOrBody(searchText);
         }
-        return postRepository.findAllByOrderByCreatedAtDesc();
+        //to be optimized
+        return postRepository.findAllByOrderByCreatedAtDesc().stream()
+                .sorted((p1,p2)-> Integer.compare(p2.getlikeCount(), p1.getlikeCount())).toList();
     }
 
-    public Post savePost(PostRequest postRequest){
+    public Post savePost(PostRequestDTO postRequestDTO){
         Post post =new Post();
-        post.setBody(postRequest.getBody());
-        post.setTitle(postRequest.getTitle());
-        post.setPostStatus(Objects.equals(postRequest.getPostStatus(), "DRAFT") ?PostStatus.DRAFT :PostStatus.PUBLISH);
-        List<Tag>tags=tagRepository.findAllById(postRequest.getTags());
+        post.setBody(postRequestDTO.getBody());
+        post.setTitle(postRequestDTO.getTitle());
+        post.setPostStatus(Objects.equals(postRequestDTO.getPostStatus(), "DRAFT") ?PostStatus.DRAFT :PostStatus.PUBLISH);
+        List<Tag>tags=tagRepository.findAllById(postRequestDTO.getTags());
         post.setTags(tags);
         return postRepository.save(post);
     }
@@ -47,14 +49,14 @@ public class PostService {
                 .orElseThrow(()->new NotFoundException("Post Not Found with this id"+postId));
     }
 
-    public Post updatePost(UUID postId, PostRequest postRequest) {
+    public Post updatePost(UUID postId, PostRequestDTO postRequestDTO) {
         Post post =postRepository.findById(postId)
                 .orElseThrow(()->new NotFoundException("Post Not Found with this id"+postId));
-        post.setBody(postRequest.getBody());
-        post.setTitle(postRequest.getTitle());
-        post.setPostStatus(Objects.equals(postRequest.getPostStatus(), "DRAFT")
+        post.setBody(postRequestDTO.getBody());
+        post.setTitle(postRequestDTO.getTitle());
+        post.setPostStatus(Objects.equals(postRequestDTO.getPostStatus(), "DRAFT")
                 ? PostStatus.DRAFT :PostStatus.PUBLISH);
-        List<Tag>tags=tagRepository.findAllById(postRequest.getTags());
+        List<Tag>tags=tagRepository.findAllById(postRequestDTO.getTags());
         post.setTags(tags);
         return postRepository.save(post);
 

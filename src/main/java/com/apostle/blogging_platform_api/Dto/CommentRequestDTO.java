@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class CommentRequest {
+public class CommentRequestDTO {
     @NotNull(message = "Body Field Cannot be null")
     @NotBlank(message = "Body Field Cannot be Blank")
     private String body;

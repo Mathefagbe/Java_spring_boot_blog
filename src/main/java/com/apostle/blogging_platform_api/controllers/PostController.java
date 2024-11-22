@@ -1,18 +1,14 @@
 package com.apostle.blogging_platform_api.controllers;
 
-import com.apostle.blogging_platform_api.Dto.PostRequest;
-import com.apostle.blogging_platform_api.model.Post;
+import com.apostle.blogging_platform_api.Dto.PostRequestDTO;
 import com.apostle.blogging_platform_api.services.PostService;
 import com.apostle.blogging_platform_api.utils.ApiResponse;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -36,7 +32,7 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<ApiResponse> getPosts(@Valid @RequestBody PostRequest post){
+    public ResponseEntity<ApiResponse> getPosts(@Valid @RequestBody PostRequestDTO post){
         ApiResponse apiResponse= new ApiResponse(
                 "Post save successfully",
                 postService.savePost(post),
@@ -56,7 +52,7 @@ public class PostController {
     }
 
     @PutMapping("/post/{post_id}")
-    public ResponseEntity<ApiResponse> updatePost(@PathVariable UUID post_id,@Valid @RequestBody PostRequest post){
+    public ResponseEntity<ApiResponse> updatePost(@PathVariable UUID post_id,@Valid @RequestBody PostRequestDTO post){
         ApiResponse apiResponse= new ApiResponse(
                 "Post updated successfully",
                 postService.updatePost(post_id,post),
