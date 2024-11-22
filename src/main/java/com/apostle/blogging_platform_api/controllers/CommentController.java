@@ -1,7 +1,6 @@
 package com.apostle.blogging_platform_api.controllers;
 
-import com.apostle.blogging_platform_api.Dto.CommentRequest;
-import com.apostle.blogging_platform_api.model.Comment;
+import com.apostle.blogging_platform_api.Dto.CommentRequestDTO;
 import com.apostle.blogging_platform_api.services.CommentService;
 import com.apostle.blogging_platform_api.utils.ApiResponse;
 import jakarta.validation.Valid;
@@ -22,7 +21,7 @@ public class CommentController {
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<ApiResponse> saveComment(@Valid @RequestBody CommentRequest comment){
+    public ResponseEntity<ApiResponse> saveComment(@Valid @RequestBody CommentRequestDTO comment){
         ApiResponse apiResponse= new ApiResponse(
                 "Post save successfully",
                 commentService.saveComment(comment),
@@ -58,7 +57,7 @@ public class CommentController {
     }
 
     @PutMapping("/comments/{commentId}")
-    public ResponseEntity<ApiResponse> updateComment(@PathVariable UUID commentId,@Valid @RequestBody CommentRequest comment){
+    public ResponseEntity<ApiResponse> updateComment(@PathVariable UUID commentId,@Valid @RequestBody CommentRequestDTO comment){
         ApiResponse apiResponse= new ApiResponse(
                 "Post save successfully",
                 commentService.updateComment(commentId,comment),
